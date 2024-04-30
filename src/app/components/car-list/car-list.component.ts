@@ -1,60 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Carro } from '../../models/carro';
+import { CarService } from '../../services/car.services';
 
-export interface Carro {
-  position: number;
-  nomeCarro: string;
-  anoFabricacao: number;
-  anoModelo: number;
-  marca: string;
-  cor: string;
-}
-
-const ELEMENT_DATA: Carro[] = [
-  {
-    position: 1,
-    nomeCarro: 'Hydrogen',
-    anoFabricacao: 1.0079,
-    anoModelo: 44.1,
-    marca: 'kk',
-    cor: 'xuxu',
-  },
-  {
-    position: 2,
-    nomeCarro: 'Hydrogen',
-    anoFabricacao: 1.0079,
-    anoModelo: 44.1,
-    marca: 'kk',
-    cor: 'xuxu',
-  },
-  {
-    position: 3,
-    nomeCarro: 'Hydrogen',
-    anoFabricacao: 1.0079,
-    anoModelo: 44.1,
-    marca: 'kk',
-    cor: 'xuxu',
-  },
-];
 
 @Component({
   selector: 'app-car-list',
   templateUrl: './car-list.component.html',
   styleUrl: './car-list.component.scss',
 })
-export class CarListComponent {
+export class CarListComponent implements OnInit {
   displayedColumns: string[] = [
-    'position',
-    'nomeCarro',
-    'anoFabricacao',
-    'anoModelo',
+    'idcarro',
+    'nomecarro',
+    'anofabricacaocarro',
+    'anomodelocarro',
     'marca',
     'cor',
   ];
-  dataSource = ELEMENT_DATA;
 
- constructor(private router:Router){ } 
+ public carros: Carro[] = [];
+
+ constructor(private router:Router,  private carservice: CarService){
+
+  } 
   cadastrarButtonClick() {
     this.router.navigate(['/car-form']);
+  }
+  ngOnInit(): void {
+      this.getCars();
+  }
+  getCars(){
+   this.carservice.getAllCarros().subscribe({
+      next:(result)=>this.carros = result
+    });
+
   }
 }
